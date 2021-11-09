@@ -5,8 +5,14 @@ date: "11/9/2021"
 output: html_document
 ---
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+# import library 
+library(tidyverse)
+library(lubridate)
+
+# import data set
+dataframe <- read_csv("2021_Iowa_Liquor_Sales.csv") 
 ```
 
 ## R Markdown
