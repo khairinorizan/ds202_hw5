@@ -10,10 +10,21 @@ output: html_document
 # import library 
 library(tidyverse)
 library(lubridate)
+library(ggplot2)
+library(dplyr)
 
 # import data set
 dataframe <- read_csv("2021_Iowa_Liquor_Sales.csv") 
+
+# data cleaning
+dataframe$Date <- mdy(dataframe$Date)
+dataframe <- dataframe %>% 
+              separate(`Store Location`, c('POINT', 'Longitude', 'Latitude'), " ", convert = TRUE) %>% 
+              separate(`Longitude`, c('SymbolLon','Longitude'), sep ='\\(') %>% 
+              separate(`Latitude`, c('Latitude','SymbolLat'), sep ='\\)') %>% 
+              select(-c('POINT', 'SymbolLon', 'SymbolLat'))
 ```
+
 
 ## R Markdown
 
