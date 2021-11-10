@@ -62,4 +62,26 @@ ggplot(weekdayBreakdown, aes(x=Weekday, y=n, fill = Weekday)) +
   labs(y = "Count")
 ```
 
+## Question 3
+Create a single plot for the monthly volumes sold. Each liquor category should be shown using a separate time series. Label the top 5 categories using text labels.
 
+```{r}
+dfWithMonth <- dataframe %>% mutate(Month = month(Date))
+
+categoryMonthBreakdown <- dfWithMonth %>% 
+                          group_by(`Category Name`, Month) %>% 
+                          count(`Category Name`, Month, sort = TRUE)
+
+top5Category <- categoryBreakdown %>% top_n(5)
+
+top5MonthlyBreakdown <- categoryMonthBreakdown %>% filter(`Category Name` %in% top5Category$`Category Name`) %>% arrange(desc(`Category Name`))
+
+ggplot(top5MonthlyBreakdown, aes(x=Month, y=n)) +
+  geom_line() + facet_wrap(~`Category Name`) + labs(y = "Count")
+```
+
+## Question 4
+Which categories are spring graduation party favorites? Find at least one category.
+
+```{r}
+```
