@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ## Data Engineering
-```{r,}
+```{r, warning=FALSE, message=FALSE}
 # import library 
 library(tidyverse)
 library(lubridate)
@@ -29,7 +29,7 @@ dataframe <- dataframe %>%
 ## Question 1
 First overview: Provide a visual breakdown of the liquor category (by `Category Name`). Include volume sold in the breakdown. Describe your figure. Which type of liquor is the most popular?
 
-```{r}
+```{r, message=FALSE}
 categoryBreakdown <- dataframe %>% 
                       group_by(`Category Name`) %>% 
                       summarize(VolumeSold = sum(`Volume Sold (Gallons)`, na.rm = TRUE)) %>% 
@@ -39,10 +39,11 @@ print(categoryBreakdown)
 ```
 
 ```{r}
-top10Category <- categoryBreakdown %>% top_n(10)
+top10Category <- categoryBreakdown %>% head(10)
 
 ggplot(top10Category, aes(x=`Category Name`, y=VolumeSold, fill = `Category Name`)) + 
-  geom_bar(stat = "identity") + theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
+  geom_bar(stat = "identity") + 
+  theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
 ```
 \
 
@@ -72,16 +73,34 @@ categoryMonthBreakdown <- dfWithMonth %>%
                           group_by(`Category Name`, Month) %>% 
                           count(`Category Name`, Month, sort = TRUE)
 
-top5Category <- categoryBreakdown %>% top_n(5)
+top5Category <- categoryBreakdown %>% head(5)
 
-top5MonthlyBreakdown <- categoryMonthBreakdown %>% filter(`Category Name` %in% top5Category$`Category Name`) %>% arrange(desc(`Category Name`))
+top5MonthlyBreakdown <- categoryMonthBreakdown %>% 
+                        filter(`Category Name` %in% top5Category$`Category Name`) %>% 
+                        arrange(desc(`Category Name`))
 
 ggplot(top5MonthlyBreakdown, aes(x=Month, y=n)) +
-  geom_line() + facet_wrap(~`Category Name`) + labs(y = "Count")
+  geom_line() + 
+  facet_wrap(~`Category Name`) + 
+  labs(y = "Count")
 ```
 
 ## Question 4
 Which categories are spring graduation party favorites? Find at least one category.
 
 ```{r}
+dfWithSemester <- dataframe %>% 
+                  mutate(Semester = semester(Date)) %>% 
+                  mutate(Semester = ifelse(Semester == 1, "Spring", "Fall"))
+
+categorySemesterBreakdown <- dfWithSemester %>% 
+                              filter(Semester == 'Spring') %>% 
+                              group_by(`Category Name`) %>% 
+                              summarize(BottlesSold = sum(`Bottles Sold`, na.rm = TRUE))
+
+top10CategoryBySemester <- categorySemesterBreakdown %>% head(10)
+
+ggplot(top10CategoryBySemester, aes(x=`Category Name`, y=BottlesSold, fill = `Category Name`)) +
+  geom_bar(stat = "identity") + 
+  theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
 ```
