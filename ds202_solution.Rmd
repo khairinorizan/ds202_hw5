@@ -5,8 +5,8 @@ date: "11/9/2021"
 output: html_document
 ---
 
-
-```{r setup, include=FALSE}
+## Data Engineering
+```{r,}
 # import library 
 library(tidyverse)
 library(lubridate)
@@ -44,21 +44,22 @@ top10Category <- categoryBreakdown %>% top_n(10)
 ggplot(top10Category, aes(x=`Category Name`, y=VolumeSold, fill = `Category Name`)) + 
   geom_bar(stat = "identity") + theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
 ```
+\
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Question 2
+Which day of the week has the most orders? Use a barchart to visualize the results. Explain the pattern and provide a reason why the pattern occurs.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r}
+dfWithWeekday <- dataframe %>% mutate(Weekday = weekdays(Date))
 
-```{r cars}
-summary(cars)
+weekdayBreakdown <- dfWithWeekday %>% 
+                      group_by(Weekday) %>% 
+                      count(Weekday, sort = TRUE)
+
+ggplot(weekdayBreakdown, aes(x=Weekday, y=n, fill = Weekday)) + 
+  geom_bar(stat = "identity") + 
+  theme(text = element_text(size=12), axis.text.x = element_text(angle = 90, hjust=1)) + 
+  labs(y = "Count")
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
