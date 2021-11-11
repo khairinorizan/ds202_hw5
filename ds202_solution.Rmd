@@ -46,6 +46,7 @@ ggplot(top10Category, aes(x=`Category Name`, y=VolumeSold, fill = `Category Name
   theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
 ```
 \
+The graph above show the top 10 liquor category in related to volume(gallon) sold. According to Bar Plot graph above, ***American Vodkas is most popular liquor*** sold in Ames with over 33 thousand gallons sold. Second most popular liquor category sold in Ames is ***Canadian Whiskies***. ***Canadian Whiskies*** managed to sell over 13 thousand gallons which differ by over 20 thousand gallons compared with ***American Vodkas***. The third most popular liquor category sold in Ames is ***Straight Bourbon Whiskies***. ***Straight Bourbon Whiskies*** manage to sell over 10 thousand gallons which not so much difference compared to the second most popular liquor sold in Ames. 
 
 ## Question 2
 Which day of the week has the most orders? Use a barchart to visualize the results. Explain the pattern and provide a reason why the pattern occurs.
@@ -60,8 +61,14 @@ weekdayBreakdown <- dfWithWeekday %>%
 ggplot(weekdayBreakdown, aes(x=Weekday, y=n, fill = Weekday)) + 
   geom_bar(stat = "identity") + 
   theme(text = element_text(size=12), axis.text.x = element_text(angle = 90, hjust=1)) + 
-  labs(y = "Count")
+  labs(y = "Count", x = "Day of the Week")
 ```
+\
+The graph above shows the relationship between the number of orders and day of the week. Apparently, Thursday and Wednesday are the day when people in Ames mostly purchase liquor. However, between Thursday and Wednesday, Thursday has the most number of orders compared to the other days. There are many factors that contribute to the graph pattern. \
+\
+One of the factors that contribute to high orders on Thursday is Mug Night. Mug Night happens every Thursday night in Campustown where a handful of bars such as Cy's Roost, Paddy's, Mickie's and few other bars carry on the tradition of making plastic 32-ounce beer mugs available for purchase or refilled at a cheaper price. \
+\
+The high orders on Wednesday may be contributed by Dollar Drinks Wednesday. As the name suggest, Dollar Drinks Wednesday occurs every Wednesday night in Campustown. On top of a handful of bars sells drink only for a dollar, BNC Fieldhouse - a sports bar in campustown - also hosts comedy night on Wednesday where The Iowa State stand-up comedy club can be spotted there.
 
 ## Question 3
 Create a single plot for the monthly volumes sold. Each liquor category should be shown using a separate time series. Label the top 5 categories using text labels.
@@ -89,9 +96,10 @@ ggplot(top5MonthlyBreakdown, aes(x=Month, y=n)) +
 Which categories are spring graduation party favorites? Find at least one category.
 
 ```{r}
-dfWithSemester <- dataframe %>% 
+dfWithSemester <- dfWithMonth %>% 
                   mutate(Semester = semester(Date)) %>% 
                   mutate(Semester = ifelse(Semester == 1, "Spring", "Fall"))
+
 
 categorySemesterBreakdown <- dfWithSemester %>% 
                               filter(Semester == 'Spring') %>% 
@@ -104,3 +112,5 @@ ggplot(top10CategoryBySemester, aes(x=`Category Name`, y=BottlesSold, fill = `Ca
   geom_bar(stat = "identity") + 
   theme(text = element_text(size=10), axis.text.x = element_text(angle = 90, hjust=1))
 ```
+
+The graph above shows the top 10 liquor categories for Spring graduation in related to the number of bottles sold. According to the graph, ***American Flavored Vodka*** is the most popular liquor for Spring graduation with a total of over 20000 bottles sold. On the other hand, American Schnapps is the second most popular liquor category with a total of 10000 bottles sold. 
